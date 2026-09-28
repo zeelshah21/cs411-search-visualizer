@@ -1,14 +1,4 @@
-"""
-app.py
-Flask backend for the Illinois Intelligent Search Visualizer.
-
-Routes
-  GET  /               -> map UI (templates/index.html)
-  GET  /api/graph      -> cities, edges, and region from map_data.json
-  GET  /api/algorithms -> list of algorithms + their concept notes
-  POST /api/search     -> run one algorithm   {source, destination, algorithm}
-  POST /api/compare    -> run all algorithms  {source, destination}
-"""
+# CS 411 Project 1 - Illinois search visualizer (Flask backend)
 
 import json
 import os
@@ -34,9 +24,9 @@ ALGORITHMS = {
         "type": "Uninformed",
         "run": lambda s, g: bfs(GRAPH, s, g),
         "concept": {
-            "main_idea": "Explores the map level by level. It visits every city 1 road away from the start, then every city 2 roads away, and so on, until it reaches the destination.",
-            "node_selection": "Uses a FIFO queue, so the city that was added to the frontier first is expanded next (the shallowest one).",
-            "information_used": "Depth only (number of roads taken). It ignores road distances, so it finds the path with the fewest stops, not the shortest drive.",
+            "main_idea": "Searches level by level. First it checks all cities 1 road away, then 2 roads away, and keeps going until it finds the destination.",
+            "node_selection": "Uses a FIFO queue so the city added first gets expanded first (shallowest node).",
+            "information_used": "Only depth (how many roads). It doesn't look at distance so it finds the path with the fewest stops, not the shortest one.",
             "complete": True,
             "optimal": "Only for fewest edges, not for distance",
         },
@@ -46,9 +36,9 @@ ALGORITHMS = {
         "type": "Uninformed",
         "run": lambda s, g: dfs(GRAPH, s, g),
         "concept": {
-            "main_idea": "Goes as deep as possible down one road before backtracking. It keeps following a single route until it hits a dead end or the goal.",
-            "node_selection": "Uses a LIFO stack, so the most recently discovered city is expanded next (the deepest one).",
-            "information_used": "None beyond the order cities were discovered. No path cost, no heuristic. Paths can be long and roundabout.",
+            "main_idea": "Goes as deep as it can down one path before backtracking. It keeps following one route until it gets stuck or finds the goal.",
+            "node_selection": "Uses a LIFO stack so the newest city found gets expanded first (deepest node).",
+            "information_used": "Nothing except the order cities were found. No cost and no heuristic, so paths can be really long.",
             "complete": "Yes on this finite graph (explored set prevents loops)",
             "optimal": False,
         },
@@ -58,9 +48,9 @@ ALGORITHMS = {
         "type": "Uninformed",
         "run": lambda s, g: ucs(GRAPH, s, g),
         "concept": {
-            "main_idea": "Expands outward from the start in order of total distance traveled, like ripples growing by miles instead of by stops.",
-            "node_selection": "Uses a priority queue and always expands the city with the lowest path cost g(n) so far.",
-            "information_used": "Path cost g(n) (real road distance from OSRM). No heuristic.",
+            "main_idea": "Expands out from the start based on total distance so far, so it grows by miles instead of by number of stops.",
+            "node_selection": "Uses a priority queue and always picks the city with the lowest path cost g(n).",
+            "information_used": "Path cost g(n) (road distance from OSRM). No heuristic.",
             "complete": True,
             "optimal": True,
         },
@@ -70,9 +60,9 @@ ALGORITHMS = {
         "type": "Uninformed",
         "run": lambda s, g: ids(GRAPH, s, g),
         "concept": {
-            "main_idea": "Runs depth-limited DFS over and over with limit 0, 1, 2, ... until the goal shows up. Gets BFS's shallowest answer with DFS's small memory use.",
-            "node_selection": "Inside each iteration it acts like DFS (deepest node first), but never goes past the current depth limit.",
-            "information_used": "Depth only. Re-expands shallow cities every iteration, so its node count is higher than BFS.",
+            "main_idea": "Runs depth-limited DFS with limit 0, 1, 2, ... until it finds the goal. Gets the same answer as BFS but uses less memory like DFS.",
+            "node_selection": "Each round works like DFS (deepest first) but stops at the current depth limit.",
+            "information_used": "Only depth. It re-expands the shallow cities every round so it expands more nodes than BFS.",
             "complete": True,
             "optimal": "Only for fewest edges, not for distance",
         },
@@ -82,9 +72,9 @@ ALGORITHMS = {
         "type": "Informed",
         "run": lambda s, g: greedy_best_first(GRAPH, s, g, COORDS),
         "concept": {
-            "main_idea": "Always heads toward whichever city looks closest to the destination as the crow flies. Very fast, but can get fooled.",
-            "node_selection": "Priority queue ordered by h(n), the straight-line (haversine) distance from the city to the goal. Lowest h(n) goes first.",
-            "information_used": "Heuristic h(n) only. It ignores the distance already driven, which is why it isn't optimal.",
+            "main_idea": "Always goes to the city that looks closest to the destination in a straight line. Pretty fast but it can pick bad routes.",
+            "node_selection": "Priority queue sorted by h(n), the straight-line (haversine) distance to the goal. Lowest h(n) goes first.",
+            "information_used": "Only the heuristic h(n). It ignores how far it already drove, that's why it's not optimal.",
             "complete": "Yes on this finite graph (explored set)",
             "optimal": False,
         },
@@ -94,9 +84,9 @@ ALGORITHMS = {
         "type": "Informed",
         "run": lambda s, g: a_star(GRAPH, s, g, COORDS),
         "concept": {
-            "main_idea": "Combines UCS and Greedy: it weighs the distance already driven plus an estimate of the distance left, so it heads toward the goal without skipping cheaper routes.",
-            "node_selection": "Priority queue ordered by f(n) = g(n) + h(n). The city with the lowest estimated total trip goes first.",
-            "information_used": "Both path cost g(n) (OSRM road km) and heuristic h(n) (straight-line km). Straight-line distance never overestimates road distance, so h is admissible and A* is optimal.",
+            "main_idea": "Basically UCS + Greedy. It uses the distance already driven plus an estimate of what's left, so it moves toward the goal but doesn't skip cheaper routes.",
+            "node_selection": "Priority queue sorted by f(n) = g(n) + h(n). Lowest estimated total goes first.",
+            "information_used": "Uses g(n) (OSRM road km) and h(n) (straight-line km). Straight-line distance is never more than road distance so h is admissible and A* is optimal.",
             "complete": True,
             "optimal": True,
         },

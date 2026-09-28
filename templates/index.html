@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Illinois Search Visualizer</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --text: #1d2330; --muted: #667085;
+    --border: #e3e6eb; --accent: #2563eb; --path: #e11d48; --explored: #f59e0b;
+    --start: #16a34a; --goal: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  .app { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+  .sidebar { background: var(--panel); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
+  #map { height: 100%; }
+  h1 { font-size: 20px; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 12px 0 4px; }
+  select { width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fff; }
+  .row { display: flex; gap: 8px; margin-top: 16px; }
+  button { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .primary { background: var(--accent); color: #fff; }
+  .secondary { background: #eef2ff; color: var(--accent); }
+  button:disabled { opacity: .5; cursor: default; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-top: 16px; }
+  .card h3 { margin: 0 0 8px; font-size: 15px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #eef2ff; color: var(--accent); font-weight: 600; margin-left: 6px; }
+  .note p { margin: 6px 0; font-size: 13.5px; line-height: 1.45; }
+  .note b { color: var(--text); }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat { background: var(--bg); border-radius: 8px; padding: 8px 10px; }
+  .stat .k { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+  .stat .v { font-size: 17px; font-weight: 700; }
+  .pathlist { font-size: 13px; line-height: 1.6; margin-top: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; }
+  tr.best td { background: #ecfdf5; }
+  .legend { font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .err { color: var(--goal); font-size: 13px; margin-top: 10px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  @media (max-width: 800px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: auto 60vh; height: auto; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h1>Intelligent Search Visualizer</h1>
+    <div class="sub">Road network: <span id="region">{{ region }}</span></div>
+
+    <label for="source">Source</label>
+    <select id="source"></select>
+    <label for="destination">Destination</label>
+    <select id="destination"></select>
+    <div class="hint">Tip: click a city on the map. First click = source, second = destination.</div>
+
+    <label for="algorithm">Algorithm</label>
+    <select id="algorithm"></select>
+
+    <div class="row">
+      <button class="primary" id="runBtn">Run search</button>
+      <button class="secondary" id="compareBtn">Compare all</button>
+    </div>
+    <div class="err" id="error"></div>
+
+    <div class="legend">
+      <span><span class="dot" style="background:var(--start)"></span>Source</span>
+      <span><span class="dot" style="background:var(--goal)"></span>Destination</span>
+      <span><span class="dot" style="background:var(--explored)"></span>Expanded</span>
+      <span><span class="dot" style="background:var(--path)"></span>Path</span>
+    </div>
+
+    <div class="card note" id="conceptCard">
+      <h3>Algorithm Concept Note <span class="tag" id="algoType"></span></h3>
+      <p><b>Main Idea:</b> <span id="mainIdea"></span></p>
+      <p><b>Node Selection:</b> <span id="nodeSel"></span></p>
+      <p><b>Information Used:</b> <span id="infoUsed"></span></p>
+      <p><b>Complete:</b> <span id="complete"></span> &nbsp;·&nbsp; <b>Optimal:</b> <span id="optimal"></span></p>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none">
+      <h3 id="resultTitle">Result</h3>
+      <div class="stats">
+        <div class="stat"><div class="k">Distance</div><div class="v" id="cost">-</div></div>
+        <div class="stat"><div class="k">Stops</div><div class="v" id="stops">-</div></div>
+        <div class="stat"><div class="k">Nodes expanded</div><div class="v" id="expanded">-</div></div>
+        <div class="stat"><div class="k">Runtime</div><div class="v" id="runtime">-</div></div>
+      </div>
+      <div class="pathlist" id="pathText"></div>
+    </div>
+
+    <div class="card" id="compareCard" style="display:none">
+      <h3>Comparison</h3>
+      <table>
+        <thead><tr><th>Algorithm</th><th>Km</th><th>Stops</th><th>Expanded</th><th>ms</th></tr></thead>
+        <tbody id="compareBody"></tbody>
+      </table>
+      <div class="hint">Green rows found the shortest distance.</div>
+    </div>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<script>
+const KM_TO_MI = 0.621371;
+const map = L.map("map");
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 18, attribution: "&copy; OpenStreetMap contributors"
+}).addTo(map);
+
+let cities = {}, algorithms = {}, markers = {};
+let resultLayer = L.layerGroup().addTo(map);
+let animTimers = [];
+let clickToggle = 0;
+
+const $ = id => document.getElementById(id);
+
+function baseStyle(name) {
+  if (name === $("source").value) return { color: "#fff", fillColor: "#16a34a", radius: 9, fillOpacity: 1, weight: 2 };
+  if (name === $("destination").value) return { color: "#fff", fillColor: "#dc2626", radius: 9, fillOpacity: 1, weight: 2 };
+  return { color: "#fff", fillColor: "#475569", radius: 6, fillOpacity: 1, weight: 2 };
+}
+function refreshMarkers() { for (const n in markers) markers[n].setStyle(baseStyle(n)); }
+
+async function init() {
+  const [g, a] = await Promise.all([fetch("/api/graph").then(r => r.json()), fetch("/api/algorithms").then(r => r.json())]);
+  cities = g.cities; algorithms = a;
+  $("region").textContent = g.region;
+
+  const names = Object.keys(cities).sort();
+  for (const sel of ["source", "destination"]) {
+    $(sel).innerHTML = names.map(n => `<option value="${n}">${n}</option>`).join("");
+  }
+  $("source").value = names.includes("Chicago") ? "Chicago" : names[0];
+  $("destination").value = names.includes("Carbondale") ? "Carbondale" : names[names.length - 1];
+  $("algorithm").innerHTML = Object.entries(algorithms)
+    .map(([k, v]) => `<option value="${k}">${v.name}</option>`).join("");
+
+  // edges
+  for (const e of g.edges) {
+    const a1 = cities[e.source], b1 = cities[e.target];
+    L.polyline([[a1.lat, a1.lon], [b1.lat, b1.lon]], { color: "#94a3b8", weight: 2, opacity: .7 })
+      .bindTooltip(`${e.source} ↔ ${e.target}<br>${e.distance_km.toFixed(1)} km (${(e.distance_km * KM_TO_MI).toFixed(1)} mi)`, { sticky: true })
+      .addTo(map);
+  }
+  // cities
+  const bounds = [];
+  for (const n of names) {
+    const c = cities[n];
+    bounds.push([c.lat, c.lon]);
+    markers[n] = L.circleMarker([c.lat, c.lon], baseStyle(n))
+      .bindTooltip(n, { direction: "top", offset: [0, -6] })
+      .on("click", () => pickCity(n))
+      .addTo(map);
+  }
+  map.fitBounds(bounds, { padding: [30, 30] });
+  showConcept();
+}
+
+function pickCity(n) {
+  if (clickToggle === 0) $("source").value = n; else $("destination").value = n;
+  clickToggle = 1 - clickToggle;
+  clearResult(); refreshMarkers();
+}
+
+function showConcept() {
+  const a = algorithms[$("algorithm").value]; if (!a) return;
+  const fmt = v => v === true ? "Yes" : v === false ? "No" : v;
+  $("algoType").textContent = a.type;
+  $("mainIdea").textContent = a.concept.main_idea;
+  $("nodeSel").textContent = a.concept.node_selection;
+  $("infoUsed").textContent = a.concept.information_used;
+  $("complete").textContent = fmt(a.concept.complete);
+  $("optimal").textContent = fmt(a.concept.optimal);
+}
+
+function clearResult() {
+  animTimers.forEach(clearTimeout); animTimers = [];
+  resultLayer.clearLayers();
+  $("error").textContent = "";
+}
+
+function fmtKm(km) { return km == null ? "-" : `${km.toFixed(1)} km`; }
+
+async function post(url, body) {
+  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.error || "Request failed");
+  return data;
+}
+
+async function runSearch() {
+  clearResult(); refreshMarkers();
+  const body = { source: $("source").value, destination: $("destination").value, algorithm: $("algorithm").value };
+  $("runBtn").disabled = true;
+  try {
+    const res = await post("/api/search", body);
+    showResult(res);
+    animate(res);
+  } catch (e) { $("error").textContent = e.message; }
+  $("runBtn").disabled = false;
+}
+
+function showResult(res) {
+  $("resultCard").style.display = "block";
+  $("resultTitle").textContent = res.algorithm_name;
+  $("cost").innerHTML = res.found ? `${fmtKm(res.cost)}<div class="k">${(res.cost * KM_TO_MI).toFixed(1)} mi</div>` : "No path";
+  $("stops").textContent = res.found ? res.num_stops : "-";
+  $("expanded").textContent = res.nodes_expanded;
+  $("runtime").textContent = `${res.runtime_ms.toFixed(3)} ms`;
+  $("pathText").innerHTML = res.found
+    ? `<b>Path:</b> ${res.path.join(" → ")}<br><b>Expansion order:</b> ${res.expanded_order.join(", ")}`
+    : "No path found.";
+}
+
+function animate(res) {
+  const step = Math.max(40, Math.min(250, 3000 / Math.max(1, res.expanded_order.length)));
+  res.expanded_order.forEach((n, i) => {
+    animTimers.push(setTimeout(() => {
+      const c = cities[n];
+      L.circleMarker([c.lat, c.lon], { radius: 12, color: "#f59e0b", weight: 3, fill: false, opacity: .9 }).addTo(resultLayer);
+    }, i * step));
+  });
+  animTimers.push(setTimeout(() => {
+    if (!res.found) return;
+    const pts = res.path.map(n => [cities[n].lat, cities[n].lon]);
+    L.polyline(pts, { color: "#e11d48", weight: 6, opacity: .9 }).addTo(resultLayer);
+    refreshMarkers();
+    for (const n in markers) markers[n].bringToFront();
+  }, res.expanded_order.length * step + 100));
+}
+
+async function compareAll() {
+  $("error").textContent = "";
+  $("compareBtn").disabled = true;
+  try {
+    const { results } = await post("/api/compare", { source: $("source").value, destination: $("destination").value });
+    const best = Math.min(...results.filter(r => r.found).map(r => r.cost));
+    $("compareBody").innerHTML = results.map(r => `
+      <tr class="${r.found && Math.abs(r.cost - best) < 1e-6 ? "best" : ""}">
+        <td>${r.algorithm_name.replace(/ \(.*\)/, "")}</td>
+        <td>${r.found ? r.cost.toFixed(1) : "-"}</td>
+        <td>${r.found ? r.num_stops : "-"}</td>
+        <td>${r.nodes_expanded}</td>
+        <td>${r.runtime_ms.toFixed(3)}</td>
+      </tr>`).join("");
+    $("compareCard").style.display = "block";
+  } catch (e) { $("error").textContent = e.message; }
+  $("compareBtn").disabled = false;
+}
+
+$("algorithm").addEventListener("change", showConcept);
+$("source").addEventListener("change", () => { clearResult(); refreshMarkers(); });
+$("destination").addEventListener("change", () => { clearResult(); refreshMarkers(); });
+$("runBtn").addEventListener("click", runSearch);
+$("compareBtn").addEventListener("click", compareAll);
+init();
+</script>
+</body>
+</html>

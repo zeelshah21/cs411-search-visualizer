@@ -1,0 +1,528 @@
+{
+  "region": "Illinois, USA",
+  "generated_at": "2026-09-28T19:54:35.746739+00:00",
+  "sources": {
+    "geocoding": "Nominatim OpenStreetMap",
+    "routing": "OSRM"
+  },
+  "num_cities": 25,
+  "num_edges": 42,
+  "connected": true,
+  "cities": {
+    "Chicago": {
+      "lat": 41.8755616,
+      "lon": -87.6244212,
+      "display_name": "Chicago, South Chicago Township, Cook County, Illinois, United States"
+    },
+    "Waukegan": {
+      "lat": 42.3602273,
+      "lon": -87.8318164,
+      "display_name": "Waukegan, Lake County, Illinois, United States"
+    },
+    "Elgin": {
+      "lat": 42.03726,
+      "lon": -88.2810994,
+      "display_name": "Elgin, Elgin Township, Kane County, Illinois, United States"
+    },
+    "Aurora": {
+      "lat": 41.7571701,
+      "lon": -88.3147539,
+      "display_name": "Aurora, Aurora Township, Kane County, Illinois, United States"
+    },
+    "Naperville": {
+      "lat": 41.7728699,
+      "lon": -88.1479278,
+      "display_name": "Naperville, Naperville Township, DuPage County, Illinois, United States"
+    },
+    "Joliet": {
+      "lat": 41.5263603,
+      "lon": -88.0840212,
+      "display_name": "Joliet, Will County, Illinois, United States"
+    },
+    "Kankakee": {
+      "lat": 41.1200325,
+      "lon": -87.8611531,
+      "display_name": "Kankakee, Kankakee County, Illinois, 60901, United States"
+    },
+    "Rockford": {
+      "lat": 42.2713945,
+      "lon": -89.093966,
+      "display_name": "Rockford, Rockford Township, Winnebago County, Illinois, United States"
+    },
+    "DeKalb": {
+      "lat": 41.9298644,
+      "lon": -88.7501925,
+      "display_name": "DeKalb, DeKalb Township, DeKalb County, Illinois, 60115, United States"
+    },
+    "Freeport": {
+      "lat": 42.2966861,
+      "lon": -89.6212271,
+      "display_name": "Freeport, Stephenson County, Illinois, 61032, United States"
+    },
+    "Galena": {
+      "lat": 42.4157304,
+      "lon": -90.4294726,
+      "display_name": "Galena, West Galena Township, Jo Daviess County, Illinois, United States"
+    },
+    "Moline": {
+      "lat": 41.5066112,
+      "lon": -90.5149988,
+      "display_name": "Moline, Rock Island County, Illinois, 61265, United States"
+    },
+    "Galesburg": {
+      "lat": 40.9475652,
+      "lon": -90.3712169,
+      "display_name": "Galesburg, Knox County, Illinois, United States"
+    },
+    "Peoria": {
+      "lat": 40.6938609,
+      "lon": -89.5891008,
+      "display_name": "Peoria, Peoria County, Illinois, United States"
+    },
+    "Bloomington": {
+      "lat": 40.4797828,
+      "lon": -88.9939147,
+      "display_name": "Bloomington, McLean County, Illinois, United States"
+    },
+    "Champaign": {
+      "lat": 40.1164841,
+      "lon": -88.2430932,
+      "display_name": "Champaign, Champaign County, Illinois, United States"
+    },
+    "Danville": {
+      "lat": 40.125222,
+      "lon": -87.6304614,
+      "display_name": "Danville, Vermilion County, Illinois, United States"
+    },
+    "Decatur": {
+      "lat": 39.8454163,
+      "lon": -88.9524151,
+      "display_name": "Decatur, Macon County, Illinois, United States"
+    },
+    "Springfield": {
+      "lat": 39.7990175,
+      "lon": -89.6439575,
+      "display_name": "Springfield, Sangamon County, Illinois, United States"
+    },
+    "Macomb": {
+      "lat": 40.4588934,
+      "lon": -90.6713939,
+      "display_name": "Macomb, McDonough County, Illinois, 61455, United States"
+    },
+    "Quincy": {
+      "lat": 39.9356016,
+      "lon": -91.4098727,
+      "display_name": "Quincy, Adams County, Illinois, United States"
+    },
+    "Effingham": {
+      "lat": 39.1201433,
+      "lon": -88.54348,
+      "display_name": "Effingham, Effingham County, Illinois, 62401, United States"
+    },
+    "Mount Vernon": {
+      "lat": 38.3172715,
+      "lon": -88.9031201,
+      "display_name": "Mount Vernon, Jefferson County, Illinois, 62864, United States"
+    },
+    "Carbondale": {
+      "lat": 37.7274692,
+      "lon": -89.216655,
+      "display_name": "Carbondale, Jackson County, Illinois, 62901, United States"
+    },
+    "Belleville": {
+      "lat": 38.5135805,
+      "lon": -89.9841627,
+      "display_name": "Belleville, Saint Clair County, Illinois, United States"
+    }
+  },
+  "edges": [
+    {
+      "source": "Chicago",
+      "target": "Waukegan",
+      "distance_km": 66.15,
+      "duration_min": 58.9
+    },
+    {
+      "source": "Chicago",
+      "target": "Elgin",
+      "distance_km": 65.65,
+      "duration_min": 59.6
+    },
+    {
+      "source": "Chicago",
+      "target": "Naperville",
+      "distance_km": 49.78,
+      "duration_min": 47.0
+    },
+    {
+      "source": "Chicago",
+      "target": "Joliet",
+      "distance_km": 71.69,
+      "duration_min": 63.0
+    },
+    {
+      "source": "Chicago",
+      "target": "Kankakee",
+      "distance_km": 95.1,
+      "duration_min": 75.4
+    },
+    {
+      "source": "Waukegan",
+      "target": "Rockford",
+      "distance_km": 128.13,
+      "duration_min": 117.9
+    },
+    {
+      "source": "Elgin",
+      "target": "Rockford",
+      "distance_km": 79.47,
+      "duration_min": 62.5
+    },
+    {
+      "source": "Elgin",
+      "target": "Aurora",
+      "distance_km": 34.7,
+      "duration_min": 40.3
+    },
+    {
+      "source": "Aurora",
+      "target": "Naperville",
+      "distance_km": 15.0,
+      "duration_min": 18.6
+    },
+    {
+      "source": "Aurora",
+      "target": "DeKalb",
+      "distance_km": 47.02,
+      "duration_min": 39.3
+    },
+    {
+      "source": "Naperville",
+      "target": "Joliet",
+      "distance_km": 30.98,
+      "duration_min": 39.3
+    },
+    {
+      "source": "Joliet",
+      "target": "Kankakee",
+      "distance_km": 60.29,
+      "duration_min": 56.1
+    },
+    {
+      "source": "Joliet",
+      "target": "Bloomington",
+      "distance_km": 153.08,
+      "duration_min": 115.0
+    },
+    {
+      "source": "DeKalb",
+      "target": "Rockford",
+      "distance_km": 69.95,
+      "duration_min": 58.0
+    },
+    {
+      "source": "DeKalb",
+      "target": "Moline",
+      "distance_km": 168.34,
+      "duration_min": 125.6
+    },
+    {
+      "source": "DeKalb",
+      "target": "Bloomington",
+      "distance_km": 194.07,
+      "duration_min": 136.4
+    },
+    {
+      "source": "Rockford",
+      "target": "Freeport",
+      "distance_km": 44.99,
+      "duration_min": 39.2
+    },
+    {
+      "source": "Freeport",
+      "target": "Galena",
+      "distance_km": 78.71,
+      "duration_min": 74.0
+    },
+    {
+      "source": "Galena",
+      "target": "Moline",
+      "distance_km": 154.73,
+      "duration_min": 123.0
+    },
+    {
+      "source": "Moline",
+      "target": "Galesburg",
+      "distance_km": 79.76,
+      "duration_min": 56.6
+    },
+    {
+      "source": "Galesburg",
+      "target": "Peoria",
+      "distance_km": 76.03,
+      "duration_min": 54.5
+    },
+    {
+      "source": "Galesburg",
+      "target": "Macomb",
+      "distance_km": 79.48,
+      "duration_min": 61.3
+    },
+    {
+      "source": "Macomb",
+      "target": "Quincy",
+      "distance_km": 106.92,
+      "duration_min": 85.6
+    },
+    {
+      "source": "Macomb",
+      "target": "Peoria",
+      "distance_km": 120.93,
+      "duration_min": 111.5
+    },
+    {
+      "source": "Peoria",
+      "target": "Bloomington",
+      "distance_km": 63.69,
+      "duration_min": 47.4
+    },
+    {
+      "source": "Peoria",
+      "target": "Springfield",
+      "distance_km": 115.92,
+      "duration_min": 83.2
+    },
+    {
+      "source": "Bloomington",
+      "target": "Champaign",
+      "distance_km": 81.72,
+      "duration_min": 61.9
+    },
+    {
+      "source": "Bloomington",
+      "target": "Springfield",
+      "distance_km": 105.85,
+      "duration_min": 78.5
+    },
+    {
+      "source": "Kankakee",
+      "target": "Champaign",
+      "distance_km": 121.31,
+      "duration_min": 87.4
+    },
+    {
+      "source": "Kankakee",
+      "target": "Danville",
+      "distance_km": 128.27,
+      "duration_min": 122.6
+    },
+    {
+      "source": "Champaign",
+      "target": "Danville",
+      "distance_km": 53.57,
+      "duration_min": 44.0
+    },
+    {
+      "source": "Champaign",
+      "target": "Decatur",
+      "distance_km": 76.14,
+      "duration_min": 58.4
+    },
+    {
+      "source": "Champaign",
+      "target": "Effingham",
+      "distance_km": 126.57,
+      "duration_min": 90.0
+    },
+    {
+      "source": "Decatur",
+      "target": "Springfield",
+      "distance_km": 62.19,
+      "duration_min": 47.2
+    },
+    {
+      "source": "Decatur",
+      "target": "Effingham",
+      "distance_km": 116.52,
+      "duration_min": 99.0
+    },
+    {
+      "source": "Springfield",
+      "target": "Quincy",
+      "distance_km": 180.74,
+      "duration_min": 135.0
+    },
+    {
+      "source": "Springfield",
+      "target": "Belleville",
+      "distance_km": 154.65,
+      "duration_min": 116.9
+    },
+    {
+      "source": "Effingham",
+      "target": "Belleville",
+      "distance_km": 160.5,
+      "duration_min": 117.6
+    },
+    {
+      "source": "Effingham",
+      "target": "Mount Vernon",
+      "distance_km": 111.08,
+      "duration_min": 79.0
+    },
+    {
+      "source": "Mount Vernon",
+      "target": "Belleville",
+      "distance_km": 106.27,
+      "duration_min": 80.8
+    },
+    {
+      "source": "Mount Vernon",
+      "target": "Carbondale",
+      "distance_km": 91.78,
+      "duration_min": 70.4
+    },
+    {
+      "source": "Carbondale",
+      "target": "Belleville",
+      "distance_km": 145.99,
+      "duration_min": 115.9
+    }
+  ],
+  "graph": {
+    "Chicago": {
+      "Waukegan": 66.15,
+      "Elgin": 65.65,
+      "Naperville": 49.78,
+      "Joliet": 71.69,
+      "Kankakee": 95.1
+    },
+    "Waukegan": {
+      "Chicago": 66.15,
+      "Rockford": 128.13
+    },
+    "Elgin": {
+      "Chicago": 65.65,
+      "Rockford": 79.47,
+      "Aurora": 34.7
+    },
+    "Aurora": {
+      "Elgin": 34.7,
+      "Naperville": 15.0,
+      "DeKalb": 47.02
+    },
+    "Naperville": {
+      "Chicago": 49.78,
+      "Aurora": 15.0,
+      "Joliet": 30.98
+    },
+    "Joliet": {
+      "Chicago": 71.69,
+      "Naperville": 30.98,
+      "Kankakee": 60.29,
+      "Bloomington": 153.08
+    },
+    "Kankakee": {
+      "Chicago": 95.1,
+      "Joliet": 60.29,
+      "Champaign": 121.31,
+      "Danville": 128.27
+    },
+    "Rockford": {
+      "Waukegan": 128.13,
+      "Elgin": 79.47,
+      "DeKalb": 69.95,
+      "Freeport": 44.99
+    },
+    "DeKalb": {
+      "Aurora": 47.02,
+      "Rockford": 69.95,
+      "Moline": 168.34,
+      "Bloomington": 194.07
+    },
+    "Freeport": {
+      "Rockford": 44.99,
+      "Galena": 78.71
+    },
+    "Galena": {
+      "Freeport": 78.71,
+      "Moline": 154.73
+    },
+    "Moline": {
+      "DeKalb": 168.34,
+      "Galena": 154.73,
+      "Galesburg": 79.76
+    },
+    "Galesburg": {
+      "Moline": 79.76,
+      "Peoria": 76.03,
+      "Macomb": 79.48
+    },
+    "Peoria": {
+      "Galesburg": 76.03,
+      "Macomb": 120.93,
+      "Bloomington": 63.69,
+      "Springfield": 115.92
+    },
+    "Bloomington": {
+      "Joliet": 153.08,
+      "DeKalb": 194.07,
+      "Peoria": 63.69,
+      "Champaign": 81.72,
+      "Springfield": 105.85
+    },
+    "Champaign": {
+      "Bloomington": 81.72,
+      "Kankakee": 121.31,
+      "Danville": 53.57,
+      "Decatur": 76.14,
+      "Effingham": 126.57
+    },
+    "Danville": {
+      "Kankakee": 128.27,
+      "Champaign": 53.57
+    },
+    "Decatur": {
+      "Champaign": 76.14,
+      "Springfield": 62.19,
+      "Effingham": 116.52
+    },
+    "Springfield": {
+      "Peoria": 115.92,
+      "Bloomington": 105.85,
+      "Decatur": 62.19,
+      "Quincy": 180.74,
+      "Belleville": 154.65
+    },
+    "Macomb": {
+      "Galesburg": 79.48,
+      "Quincy": 106.92,
+      "Peoria": 120.93
+    },
+    "Quincy": {
+      "Macomb": 106.92,
+      "Springfield": 180.74
+    },
+    "Effingham": {
+      "Champaign": 126.57,
+      "Decatur": 116.52,
+      "Belleville": 160.5,
+      "Mount Vernon": 111.08
+    },
+    "Mount Vernon": {
+      "Effingham": 111.08,
+      "Belleville": 106.27,
+      "Carbondale": 91.78
+    },
+    "Carbondale": {
+      "Mount Vernon": 91.78,
+      "Belleville": 145.99
+    },
+    "Belleville": {
+      "Springfield": 154.65,
+      "Effingham": 160.5,
+      "Mount Vernon": 106.27,
+      "Carbondale": 145.99
+    }
+  }
+}

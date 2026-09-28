@@ -12,7 +12,7 @@
 ## Student Information 
 - **Name:** Zeel Shah
 - **UID (netID):** zshah27
-- **UIN:** [Write your UIN here]
+- **UIN:** 663529765
 
 ---
 
@@ -41,8 +41,8 @@
 
 ## Section 4: Deployed and Presentation Information
 - **Deployment Platform:** Render
-- **Live Deployment URL:** [Provide your live deployment site URL here]
-- **Video Presentation Link:** [Provide an accessible link to your 5–7 minute video presentation]
+- **Live Deployment URL:** https://cs411-search-visualizer.onrender.com
+- **Video Presentation Link:** https://drive.google.com/file/d/1HIILAD_TpvbhHFsvqTO-UG27hB7TrR5S/view?usp=sharing
 
 ---
 
